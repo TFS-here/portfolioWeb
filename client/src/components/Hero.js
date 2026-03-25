@@ -43,7 +43,7 @@ const Hero = () => {
   useEffect(() => {
     const fetchResume = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/resume');
+        const res = await fetch('https://portfolioweb-37d3.onrender.com/api/resume');
         const data = await res.json();
         
         if (res.ok && data.resumeUrl) {
