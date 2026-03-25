@@ -10,7 +10,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('https://portfolio-kkij.onrender.com/api/auth/login', { email, password });
+      const res = await axios.post('https://portfolioweb-37d3.onrender.com/api/auth/login', { email, password });
       localStorage.setItem('token', res.data.token);
       navigate('/admin');
     } catch (err) {
@@ -22,7 +22,7 @@ const Login = () => {
     try {
         // We do NOT send a token here. 
         // The server will only accept this if 0 users exist in DB.
-        await axios.post('https://portfolio-kkij.onrender.com/api/auth/register', { email, password });
+        await axios.post('https://portfolioweb-37d3.onrender.com/api/auth/register', { email, password });
         alert("First Admin Created Successfully! Please Login.");
     } catch (err) {
         // If server returns 403, it means an admin already exists
