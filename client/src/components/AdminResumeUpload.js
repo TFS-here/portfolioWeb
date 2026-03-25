@@ -29,7 +29,7 @@ const AdminResumeUpload = () => {
 
     try {
       // Replace with your actual backend URL if it's hosted elsewhere
-      const response = await fetch('http://localhost:5000/api/resume/upload', {
+      const response = await fetch('https://portfolioweb-37d3.onrender.com/api/resume/upload', {
         method: 'POST',
         body: formData, 
         // Note: Do NOT set 'Content-Type': 'application/json' here. 
@@ -60,7 +60,7 @@ const AdminResumeUpload = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/resume/delete', {
+      const response = await fetch('https://portfolioweb-37d3.onrender.com/api/resume/delete', {
         method: 'DELETE',
       });
 
