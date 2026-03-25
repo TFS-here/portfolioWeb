@@ -14,7 +14,7 @@ const Footer = () => {
     setStatus('sending');
 
     try {
-      await axios.post('https://portfolio-kkij.onrender.com/api/messages', form);
+      await axios.post('https://portfolioweb-37d3.onrender.com/api/messages', form);
       setStatus('success');
       setForm({ name: '', email: '', message: '' }); // Clear form
       setTimeout(() => setStatus(''), 5000);
