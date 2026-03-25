@@ -1,15 +1,20 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaEnvelope, FaDownload } from 'react-icons/fa';
 
 const Hero = () => {
   const [text, setText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   const [loopNum, setLoopNum] = useState(0);
   const [typingSpeed, setTypingSpeed] = useState(150);
+  
+  const [resumeUrl, setResumeUrl] = useState(null);
+  const [isResumeLoading, setIsResumeLoading] = useState(true);
+  const [isDownloading, setIsDownloading] = useState(false); // New state for loading text
 
   const roles = ["MERN Stack Developer", "Competitive Programmer", "Tech Enthusiast"];
 
+  // 1. Typing Animation Effect
   useEffect(() => {
     const handleTyping = () => {
       const i = loopNum % roles.length;
@@ -33,6 +38,60 @@ const Hero = () => {
     const timer = setTimeout(handleTyping, typingSpeed);
     return () => clearTimeout(timer);
   }, [text, isDeleting, loopNum, roles, typingSpeed]);
+
+  // 2. Fetch Resume URL Effect
+  useEffect(() => {
+    const fetchResume = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/resume');
+        const data = await res.json();
+        
+        if (res.ok && data.resumeUrl) {
+          setResumeUrl(data.resumeUrl);
+        }
+      } catch (error) {
+        console.error("Error fetching resume:", error);
+      } finally {
+        setIsResumeLoading(false);
+      }
+    };
+
+    fetchResume();
+  }, []);
+
+  // --- NEW: Bulletproof Download Function ---
+  const handleDownload = async (e) => {
+    e.preventDefault();
+    if (!resumeUrl) return;
+
+    setIsDownloading(true);
+
+    try {
+      // Fetch the file directly from Cloudinary
+      const response = await fetch(resumeUrl);
+      const blob = await response.blob();
+      
+      // Create a local URL for the downloaded blob
+      const blobUrl = window.URL.createObjectURL(blob);
+      
+      // Create a temporary hidden link to trigger the named download
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = 'Md_Tasnim_Ferdous_Resume.pdf'; // Force the exact name here
+      document.body.appendChild(link);
+      link.click();
+      
+      // Clean up
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error("Download failed, opening in new tab instead.", error);
+      // Fallback: If fetch fails due to strict browser CORS, just open it
+      window.open(resumeUrl, '_blank');
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   return (
     <section className="h-screen flex flex-col justify-center items-center text-center px-4 relative overflow-hidden bg-cyber-black">
@@ -64,12 +123,33 @@ const Hero = () => {
         </p>
 
         <div className="flex gap-6 justify-center">
-          <a href="https://github.com/shifattfs00" target="_blank" rel="noreferrer" className="text-3xl text-gray-400 hover:text-neon-green transition-colors"><FaGithub /></a>
-          <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="text-3xl text-gray-400 hover:text-neon-blue transition-colors"><FaLinkedin /></a>
+          <a href="https://github.com/TFS-here" target="_blank" rel="noreferrer" className="text-3xl text-gray-400 hover:text-neon-green transition-colors"><FaGithub /></a>
+          <a href="https://www.linkedin.com/in/md-tasnim-ferdous-972429240/" target="_blank" rel="noreferrer" className="text-3xl text-gray-400 hover:text-neon-blue transition-colors"><FaLinkedin /></a>
           <a href="mailto:shifattfs00@gmail.com" className="text-3xl text-gray-400 hover:text-neon-green transition-colors"><FaEnvelope /></a>
         </div>
+
+        {/* --- UPDATED: Button triggering the handleDownload function --- */}
+        <motion.div 
+          className='mt-12'
+          whileHover={resumeUrl && !isDownloading ? { scale: 1.05 } : {}}
+          whileTap={resumeUrl && !isDownloading ? { scale: 0.95 } : {}}
+        >
+          <a 
+            href={resumeUrl || "#"} 
+            onClick={handleDownload}
+            className={`inline-flex items-center gap-3 px-8 py-3 border-2 font-mono text-lg uppercase tracking-widest transition-all duration-300 ${
+              resumeUrl 
+                ? 'border-neon-green text-neon-green hover:bg-neon-green hover:text-black' 
+                : 'border-gray-600 text-gray-600 cursor-not-allowed'
+            }`}
+          >
+            <FaDownload />
+            {isResumeLoading ? 'Loading...' : isDownloading ? 'Downloading...' : resumeUrl ? 'Download Resume' : 'Resume Unavailable'}
+          </a>
+        </motion.div>
       </motion.div>
     </section>
   );
 };
+
 export default Hero;
