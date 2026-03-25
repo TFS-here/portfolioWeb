@@ -11,7 +11,7 @@ const Home = () => {
 
   useEffect(() => {
     // Make sure your backend server is running on port 5000!
-    axios.get('https://portfolio-kkij.onrender.com/api/projects')
+    axios.get('https://portfolioweb-37d3.onrender.com/api/projects')
       .then(res => setProjects(res.data))
       .catch(err => console.error(err));
   }, []);
