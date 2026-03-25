@@ -27,8 +27,8 @@ const Admin = () => {
   const navigate = useNavigate();
 
   // Base API URL
-  //const API_BASE = 'https://portfolio-kkij.onrender.com/api';
-  const API_BASE = 'http://localhost:5000/api';
+  const API_BASE = 'https://portfolioweb-37d3.onrender.com/api';
+  //const API_BASE = 'http://localhost:5000/api';
 
   useEffect(() => { 
     if (activeTab === 'resume') {
