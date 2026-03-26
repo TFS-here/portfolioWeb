@@ -44,10 +44,10 @@ const Footer = () => {
           </div>
 
           <div className="flex gap-4 mt-8">
-            <a href="https://github.com/shifattfs00" target="_blank" rel="noreferrer" className="p-3 bg-gray-900 rounded-full hover:bg-neon-green hover:text-black transition-all">
+            <a href="https://github.com/TFS-here" target="_blank" rel="noreferrer" className="p-3 bg-gray-900 rounded-full hover:bg-neon-green hover:text-black transition-all">
               <FaGithub size={20} />
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="p-3 bg-gray-900 rounded-full hover:bg-neon-blue hover:text-black transition-all">
+            <a href="https://www.linkedin.com/in/md-tasnim-ferdous-972429240/" target="_blank" rel="noreferrer" className="p-3 bg-gray-900 rounded-full hover:bg-neon-blue hover:text-black transition-all">
               <FaLinkedin size={20} />
             </a>
           </div>
