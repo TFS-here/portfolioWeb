@@ -1,15 +1,25 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaTrash, FaPlus, FaEdit, FaTimes, FaSignOutAlt, FaCode, FaProjectDiagram, FaUserPlus, FaEnvelope, FaClock, FaFilePdf } from 'react-icons/fa';
+import { FaTrash, FaPlus, FaEdit, FaTimes, FaSignOutAlt, FaCode, FaProjectDiagram, FaUserPlus, FaEnvelope, FaClock, FaFilePdf, FaArrowUp, FaArrowDown } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+
+// Configure Axios to automatically attach the JWT token to every request
+axios.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers['x-auth-token'] = token;
+  }
+  return config;
+}, (error) => Promise.reject(error));
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState('projects'); // 'projects', 'stats', 'messages', or 'resume'
   const [data, setData] = useState([]);
   
   // Forms State
-  const [projectForm, setProjectForm] = useState({ title: '', description: '', techStack: '', liveLink: '', repoLink: '' });
+  const [projectForm, setProjectForm] = useState({ title: '', description: '', techStack: [], liveLink: '', repoLink: '' });
+  const [techInput, setTechInput] = useState('');
   const [statForm, setStatForm] = useState({ platform: '', link: '', totalSolved: '', totalContests: '', rating: '', highestRating: '', iconColor: '#00ff9d' });
   
   // Resume State
@@ -36,6 +46,7 @@ const Admin = () => {
     } else {
       fetchData(); 
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab]);
 
   const fetchData = async () => {
@@ -84,7 +95,7 @@ const Admin = () => {
   const startEdit = (item) => {
     setIsEditing(true);
     setCurrentId(item._id);
-    if (activeTab === 'projects') setProjectForm({ ...item, techStack: item.techStack.join(', ') });
+    if (activeTab === 'projects') setProjectForm({ ...item, techStack: item.techStack || [] });
     else setStatForm(item);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -92,7 +103,8 @@ const Admin = () => {
   const clearForm = () => {
     setIsEditing(false);
     setCurrentId(null);
-    setProjectForm({ title: '', description: '', techStack: '', liveLink: '', repoLink: '' });
+    setProjectForm({ title: '', description: '', techStack: [], liveLink: '', repoLink: '' });
+    setTechInput('');
     setStatForm({ platform: '', link: '', totalSolved: '', totalContests: '', rating: '', highestRating: '', iconColor: '#00ff9d' });
     setResumeMessage('');
     setResumeFile(null);
@@ -101,7 +113,17 @@ const Admin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const endpoint = activeTab === 'projects' ? `${API_BASE}/projects` : `${API_BASE}/stats`;
-    let payload = activeTab === 'projects' ? { ...projectForm, techStack: projectForm.techStack.split(',').map(t => t.trim()) } : statForm;
+    
+    // Auto-add anything left in the input field
+    let finalTechStack = [...projectForm.techStack];
+    if (activeTab === 'projects' && techInput.trim()) {
+      if (!finalTechStack.includes(techInput.trim())) {
+        finalTechStack.push(techInput.trim());
+      }
+      setTechInput('');
+    }
+    
+    let payload = activeTab === 'projects' ? { ...projectForm, techStack: finalTechStack } : statForm;
 
     try {
       if (isEditing) await axios.put(`${endpoint}/${currentId}`, payload);
@@ -123,6 +145,78 @@ const Admin = () => {
     fetchData();
   };
 
+  const moveProject = async (index, direction) => {
+    if (activeTab !== 'projects') return;
+    if (direction === -1 && index === 0) return; // already at top
+    if (direction === 1 && index === data.length - 1) return; // already at bottom
+
+    const newData = [...data];
+    // Swap items
+    const temp = newData[index];
+    newData[index] = newData[index + direction];
+    newData[index + direction] = temp;
+
+    // Update their order properties based on their new index
+    newData.forEach((item, i) => { item.order = i; });
+    
+    // Optimistic UI update
+    setData(newData);
+
+    try {
+      const updates = newData.map(item => ({ _id: item._id, order: item.order }));
+      await axios.put(`${API_BASE}/projects/reorder/bulk`, { updates });
+    } catch (err) {
+      console.error("Reorder failed", err);
+      fetchData(); // Revert on failure
+    }
+  };
+
+  const handleTechKeyDown = (e) => {
+    if (e.key === 'Enter' || e.key === ',') {
+      e.preventDefault();
+      const val = techInput.trim();
+      if (val && !projectForm.techStack.includes(val)) {
+        setProjectForm({ ...projectForm, techStack: [...projectForm.techStack, val] });
+        setTechInput('');
+      }
+    } else if (e.key === 'Backspace' && !techInput && projectForm.techStack.length > 0) {
+      const newStack = [...projectForm.techStack];
+      newStack.pop();
+      setProjectForm({ ...projectForm, techStack: newStack });
+    }
+  };
+
+  const handleTechPaste = (e) => {
+    e.preventDefault();
+    const pasteData = e.clipboardData.getData('text');
+    // Split by commas, or if none exist, try splitting by newlines or just leave as is.
+    // If they paste a large space-separated string, we can split by spaces if there are no commas.
+    let tags = [];
+    if (pasteData.includes(',')) {
+      tags = pasteData.split(',').map(t => t.trim()).filter(Boolean);
+    } else if (pasteData.includes('\n')) {
+      tags = pasteData.split('\n').map(t => t.trim()).filter(Boolean);
+    } else {
+      // Split by spaces as a fallback if they paste a space-separated string without commas
+      tags = pasteData.split(' ').map(t => t.trim()).filter(Boolean);
+    }
+    
+    const newStack = [...projectForm.techStack];
+    tags.forEach(t => {
+      if (!newStack.includes(t)) newStack.push(t);
+    });
+    setProjectForm({ ...projectForm, techStack: newStack });
+  };
+
+  const removeTech = (tech) => {
+    setProjectForm({ ...projectForm, techStack: projectForm.techStack.filter(t => t !== tech) });
+  };
+
+  const editTech = (tech) => {
+    setProjectForm({ ...projectForm, techStack: projectForm.techStack.filter(t => t !== tech) });
+    setTechInput(tech);
+  };
+
   // ==========================================
   // RESUME SPECIFIC FUNCTIONS
   // ==========================================
@@ -138,8 +232,12 @@ const Admin = () => {
 
     try {
       // Note: We use fetch here because axios sometimes alters FormData boundaries
+      const token = localStorage.getItem('token');
       const res = await fetch(`${API_BASE}/resume/upload`, {
         method: 'POST',
+        headers: {
+          'x-auth-token': token
+        },
         body: formData,
       });
       
@@ -164,7 +262,13 @@ const Admin = () => {
     
     setResumeLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/resume/delete`, { method: 'DELETE' });
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_BASE}/resume/delete`, { 
+        method: 'DELETE',
+        headers: {
+          'x-auth-token': token
+        }
+      });
       if (res.ok) {
         setResumeMessage('🗑️ Resume deleted successfully!');
         setCurrentResume(null);
@@ -284,7 +388,36 @@ const Admin = () => {
                 <>
                   <input name="title" value={projectForm.title} onChange={handleProjectChange} className="w-full bg-cyber-gray border border-gray-700 rounded p-3 text-white focus:border-neon-green outline-none" placeholder="Project Title" required />
                   <textarea name="description" rows="3" value={projectForm.description} onChange={handleProjectChange} className="w-full bg-cyber-gray border border-gray-700 rounded p-3 text-white focus:border-neon-green outline-none" placeholder="Description" required />
-                  <input name="techStack" value={projectForm.techStack} onChange={handleProjectChange} className="w-full bg-cyber-gray border border-gray-700 rounded p-3 text-white focus:border-neon-green outline-none" placeholder="React, Node.js" />
+                  
+                  <div className="w-full bg-cyber-gray border border-gray-700 rounded p-2 focus-within:border-neon-green min-h-[50px] flex flex-wrap gap-2 items-center">
+                    {projectForm.techStack.map((tech, idx) => (
+                      <span 
+                        key={idx} 
+                        onClick={() => editTech(tech)}
+                        className="flex items-center gap-2 bg-neon-blue/20 text-neon-blue border border-neon-blue/30 px-3 py-1 rounded-full text-sm font-bold cursor-pointer hover:bg-neon-blue/40 transition-colors"
+                        title="Click to edit"
+                      >
+                        {tech}
+                        <button 
+                          type="button" 
+                          onClick={(e) => { e.stopPropagation(); removeTech(tech); }} 
+                          className="text-neon-blue hover:text-white transition-colors"
+                        >
+                          <FaTimes size={12} />
+                        </button>
+                      </span>
+                    ))}
+                    <input 
+                      type="text" 
+                      value={techInput} 
+                      onChange={(e) => setTechInput(e.target.value)}
+                      onKeyDown={handleTechKeyDown}
+                      onPaste={handleTechPaste}
+                      className="flex-grow bg-transparent text-white outline-none min-w-[150px] p-1" 
+                      placeholder="Type tool & press Enter/Comma (or Paste)" 
+                    />
+                  </div>
+                  
                   <div className="grid grid-cols-2 gap-4">
                     <input name="liveLink" value={projectForm.liveLink} onChange={handleProjectChange} placeholder="Live URL" className="bg-cyber-gray border border-gray-700 rounded p-3 text-white focus:border-neon-green outline-none" />
                     <input name="repoLink" value={projectForm.repoLink} onChange={handleProjectChange} placeholder="GitHub URL" className="bg-cyber-gray border border-gray-700 rounded p-3 text-white focus:border-neon-green outline-none" />
@@ -361,6 +494,12 @@ const Admin = () => {
                   </div>
                   
                   <div className="flex gap-2 ml-4">
+                    {activeTab === 'projects' && (
+                      <div className="flex flex-col gap-1 mr-2 border-r border-gray-700 pr-4">
+                        <button onClick={() => moveProject(data.indexOf(item), -1)} disabled={data.indexOf(item) === 0} className="p-1 text-gray-500 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed"><FaArrowUp size={12} /></button>
+                        <button onClick={() => moveProject(data.indexOf(item), 1)} disabled={data.indexOf(item) === data.length - 1} className="p-1 text-gray-500 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed"><FaArrowDown size={12} /></button>
+                      </div>
+                    )}
                     {activeTab !== 'messages' && (
                       <button onClick={() => startEdit(item)} className="p-2 text-yellow-400 hover:bg-yellow-400/10 rounded"><FaEdit /></button>
                     )}

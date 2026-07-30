@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const Message = require('../models/Message');
 const nodemailer = require('nodemailer');
+const strictAuth = require('../middleware/strictAuth');
 
 // POST: Save Message & Email Me
 router.post('/', async (req, res) => {
@@ -55,7 +56,7 @@ router.post('/', async (req, res) => {
 });
 
 // GET (Admin only)
-router.get('/', async (req, res) => {
+router.get('/', strictAuth, async (req, res) => {
   try {
     const messages = await Message.find().sort({ date: -1 });
     res.json(messages);
@@ -65,7 +66,7 @@ router.get('/', async (req, res) => {
 });
 
 // DELETE (Admin only)
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', strictAuth, async (req, res) => {
   try {
     await Message.findByIdAndDelete(req.params.id);
     res.json("Message deleted");

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Resume = require('../models/Resume');
 const { cloudinary, upload } = require('../utils/upload');
+const strictAuth = require('../middleware/strictAuth');
 
 // GET: Fetch the current resume
 router.get('/', async (req, res) => {
@@ -18,7 +19,7 @@ router.get('/', async (req, res) => {
 });
 
 // POST: Upload a new resume
-router.post('/upload', upload.single('file'), async (req, res) => {
+router.post('/upload', strictAuth, upload.single('file'), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ message: "No file provided" });
 
@@ -46,7 +47,7 @@ router.post('/upload', upload.single('file'), async (req, res) => {
 });
 
 // DELETE: Delete the current resume
-router.delete('/delete', async (req, res) => {
+router.delete('/delete', strictAuth, async (req, res) => {
   try {
     const resumeData = await Resume.findOne();
     if (!resumeData) return res.status(400).json({ message: "No resume to delete" });

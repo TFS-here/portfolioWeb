@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaEnvelope, FaDownload } from 'react-icons/fa';
 
+const roles = ["MERN Stack Developer", "Competitive Programmer", "Tech Enthusiast"];
+
 const Hero = () => {
   const [text, setText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
@@ -11,8 +13,6 @@ const Hero = () => {
   const [resumeUrl, setResumeUrl] = useState(null);
   const [isResumeLoading, setIsResumeLoading] = useState(true);
   const [isDownloading, setIsDownloading] = useState(false); // New state for loading text
-
-  const roles = ["MERN Stack Developer", "Competitive Programmer", "Tech Enthusiast"];
 
   // 1. Typing Animation Effect
   useEffect(() => {

@@ -7,6 +7,7 @@ const ProjectSchema = new mongoose.Schema({
   liveLink: String,
   repoLink: String,
   image: String,
+  order: { type: Number, default: 0 }
 });
 
 module.exports = mongoose.model('Project', ProjectSchema);
