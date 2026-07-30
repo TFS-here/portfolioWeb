@@ -52,15 +52,22 @@ router.delete('/delete', strictAuth, async (req, res) => {
     const resumeData = await Resume.findOne();
     if (!resumeData) return res.status(400).json({ message: "No resume to delete" });
 
-    // Delete from Cloudinary
-    await cloudinary.uploader.destroy(resumeData.resumePublicId, { resource_type: "raw" });
+    // Try to delete from Cloudinary (don't fail if this errors)
+    if (resumeData.resumePublicId) {
+      try {
+        await cloudinary.uploader.destroy(resumeData.resumePublicId, { resource_type: "raw" });
+      } catch (cloudErr) {
+        console.error("Cloudinary delete error (non-fatal):", cloudErr.message);
+      }
+    }
 
-    // Delete from MongoDB
+    // Delete from MongoDB regardless
     await Resume.deleteOne({});
 
     res.status(200).json({ message: "Resume deleted successfully" });
   } catch (error) {
-    res.status(500).json({ error: "Deletion failed" });
+    console.error("Resume delete error:", error);
+    res.status(500).json({ error: "Deletion failed", details: error.message });
   }
 });
 
