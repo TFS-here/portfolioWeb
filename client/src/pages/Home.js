@@ -13,7 +13,7 @@ const Home = () => {
 
   useEffect(() => {
     // Make sure your backend server is running on port 5000!
-    axios.get('http://localhost:5000/api/projects')
+    axios.get(`${process.env.REACT_APP_API_BASE || 'http://localhost:5000/api'}/projects`)
       .then(res => setProjects(res.data))
       .catch(err => console.error(err));
   }, []);
