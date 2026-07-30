@@ -288,33 +288,33 @@ const Admin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-cyber-black text-gray-300 p-8 pt-24 font-mono relative">
+    <div className="min-h-screen bg-cyber-black text-gray-300 p-4 md:p-8 pt-20 md:pt-24 font-mono relative">
       
       {/* HEADER */}
-      <div className="max-w-6xl mx-auto flex justify-between items-center mb-8 border-b border-gray-800 pb-4">
-        <h1 className="text-4xl font-display text-white">ADMIN <span className="text-neon-green">PANEL</span></h1>
-        <div className="flex gap-4">
-          <button onClick={() => setShowAdminForm(true)} className="flex items-center gap-2 bg-neon-blue/10 text-neon-blue border border-neon-blue/50 px-4 py-2 rounded hover:bg-neon-blue hover:text-black transition-all font-bold">
-            <FaUserPlus /> ADD ADMIN
+      <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 border-b border-gray-800 pb-4">
+        <h1 className="text-3xl md:text-4xl font-display text-white">ADMIN <span className="text-neon-green">PANEL</span></h1>
+        <div className="flex gap-3">
+          <button onClick={() => setShowAdminForm(true)} className="flex items-center gap-2 bg-neon-blue/10 text-neon-blue border border-neon-blue/50 px-3 py-2 rounded hover:bg-neon-blue hover:text-black transition-all font-bold text-sm">
+            <FaUserPlus /> <span className="hidden sm:inline">ADD ADMIN</span>
           </button>
-          <button onClick={handleLogout} className="flex items-center gap-2 bg-red-500/10 text-red-500 border border-red-500/50 px-4 py-2 rounded hover:bg-red-500 hover:text-white transition-all font-bold">
-            <FaSignOutAlt /> LOGOUT
+          <button onClick={handleLogout} className="flex items-center gap-2 bg-red-500/10 text-red-500 border border-red-500/50 px-3 py-2 rounded hover:bg-red-500 hover:text-white transition-all font-bold text-sm">
+            <FaSignOutAlt /> <span className="hidden sm:inline">LOGOUT</span>
           </button>
         </div>
       </div>
 
       {/* TABS */}
-      <div className="max-w-6xl mx-auto flex gap-4 mb-10 overflow-x-auto">
-        <button onClick={() => { setActiveTab('projects'); clearForm(); }} className={`flex items-center gap-2 px-6 py-3 rounded-t-lg font-bold transition-all ${activeTab === 'projects' ? 'bg-neon-green text-black' : 'bg-gray-800 text-gray-400 hover:text-white'}`}>
+      <div className="max-w-6xl mx-auto flex gap-2 md:gap-4 mb-10 overflow-x-auto pb-2">
+        <button onClick={() => { setActiveTab('projects'); clearForm(); }} className={`flex items-center gap-1 md:gap-2 px-3 md:px-6 py-2 md:py-3 rounded-t-lg font-bold transition-all text-sm whitespace-nowrap ${activeTab === 'projects' ? 'bg-neon-green text-black' : 'bg-gray-800 text-gray-400 hover:text-white'}`}>
           <FaProjectDiagram /> PROJECTS
         </button>
-        <button onClick={() => { setActiveTab('stats'); clearForm(); }} className={`flex items-center gap-2 px-6 py-3 rounded-t-lg font-bold transition-all ${activeTab === 'stats' ? 'bg-neon-blue text-black' : 'bg-gray-800 text-gray-400 hover:text-white'}`}>
+        <button onClick={() => { setActiveTab('stats'); clearForm(); }} className={`flex items-center gap-1 md:gap-2 px-3 md:px-6 py-2 md:py-3 rounded-t-lg font-bold transition-all text-sm whitespace-nowrap ${activeTab === 'stats' ? 'bg-neon-blue text-black' : 'bg-gray-800 text-gray-400 hover:text-white'}`}>
           <FaCode /> CP STATS
         </button>
-        <button onClick={() => { setActiveTab('resume'); clearForm(); }} className={`flex items-center gap-2 px-6 py-3 rounded-t-lg font-bold transition-all ${activeTab === 'resume' ? 'bg-purple-500 text-black' : 'bg-gray-800 text-gray-400 hover:text-white'}`}>
+        <button onClick={() => { setActiveTab('resume'); clearForm(); }} className={`flex items-center gap-1 md:gap-2 px-3 md:px-6 py-2 md:py-3 rounded-t-lg font-bold transition-all text-sm whitespace-nowrap ${activeTab === 'resume' ? 'bg-purple-500 text-black' : 'bg-gray-800 text-gray-400 hover:text-white'}`}>
           <FaFilePdf /> RESUME
         </button>
-        <button onClick={() => { setActiveTab('messages'); clearForm(); }} className={`flex items-center gap-2 px-6 py-3 rounded-t-lg font-bold transition-all ${activeTab === 'messages' ? 'bg-yellow-400 text-black' : 'bg-gray-800 text-gray-400 hover:text-white'}`}>
+        <button onClick={() => { setActiveTab('messages'); clearForm(); }} className={`flex items-center gap-1 md:gap-2 px-3 md:px-6 py-2 md:py-3 rounded-t-lg font-bold transition-all text-sm whitespace-nowrap ${activeTab === 'messages' ? 'bg-yellow-400 text-black' : 'bg-gray-800 text-gray-400 hover:text-white'}`}>
           <FaEnvelope /> MESSAGES
         </button>
       </div>

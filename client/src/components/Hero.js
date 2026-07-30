@@ -103,21 +103,21 @@ const Hero = () => {
         transition={{ duration: 0.8 }}
         className="z-10"
       >
-        <h2 className="text-neon-green font-mono text-lg md:text-xl mb-4 tracking-widest">
+        <h2 className="text-neon-green font-mono text-sm md:text-xl mb-3 tracking-widest">
           HI, MY NAME IS
         </h2>
         
-        <h1 className="text-5xl md:text-7xl font-display font-bold text-white mb-6 tracking-tight">
+        <h1 className="text-4xl sm:text-5xl md:text-7xl font-display font-bold text-white mb-4 md:mb-6 tracking-tight px-2">
           Md. Tasnim Ferdous
         </h1>
 
-        <div className="h-10 mb-8">
-          <span className="text-2xl md:text-3xl text-neon-blue font-mono border-r-4 border-neon-green pr-2">
+        <div className="h-8 md:h-10 mb-6 md:mb-8">
+          <span className="text-xl md:text-3xl text-neon-blue font-mono border-r-4 border-neon-green pr-2">
             {text}
           </span>
         </div>
 
-        <p className="text-gray-400 max-w-2xl mx-auto text-lg mb-10 leading-relaxed font-mono">
+        <p className="text-gray-400 max-w-2xl mx-auto text-sm md:text-lg mb-8 md:mb-10 leading-relaxed font-mono px-2">
           Building scalable web applications and solving complex algorithmic problems.
           <br /> Based in <span className="text-white">Patuakhali, Bangladesh</span>.
         </p>
