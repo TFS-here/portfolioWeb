@@ -27,21 +27,7 @@ router.delete('/:id', strictAuth, async (req, res) => {
     res.json("Project deleted.");
   } catch (err) { res.status(500).json(err); }
 });
-// UPDATE a project
-router.put('/:id', strictAuth, async (req, res) => {
-  try {
-    const updatedProject = await Project.findByIdAndUpdate(
-      req.params.id, 
-      { $set: req.body }, 
-      { new: true }
-    );
-    res.status(200).json(updatedProject);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-// REORDER Projects
+// REORDER Projects - must be BEFORE /:id to avoid Express matching "reorder" as an ID
 router.put('/reorder/bulk', strictAuth, async (req, res) => {
   try {
     const { updates } = req.body; // Expecting { updates: [{_id: "...", order: 0}, ...] }
@@ -56,6 +42,20 @@ router.put('/reorder/bulk', strictAuth, async (req, res) => {
 
     await Project.bulkWrite(bulkOps);
     res.status(200).json("Projects reordered successfully");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// UPDATE a project
+router.put('/:id', strictAuth, async (req, res) => {
+  try {
+    const updatedProject = await Project.findByIdAndUpdate(
+      req.params.id, 
+      { $set: req.body }, 
+      { new: true }
+    );
+    res.status(200).json(updatedProject);
   } catch (err) {
     res.status(500).json(err);
   }
