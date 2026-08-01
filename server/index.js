@@ -26,6 +26,15 @@ mongoose.connect(process.env.MONGO_URI)
   .catch(err => console.log(err));
 
 // 4. Register Routes
+app.get('/', (req, res) => {
+  res.json({
+    status: 'ok',
+    message: 'Portfolio API is running',
+    db: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected',
+    endpoints: ['/api/projects', '/api/stats', '/api/auth', '/api/messages', '/api/resume']
+  });
+});
+
 app.use('/api/projects', projectRoutes);
 app.use('/api/stats', statRoutes);
 app.use('/api/auth', authRoutes);
