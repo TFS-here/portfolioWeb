@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios'; // Import axios
 import { motion } from 'framer-motion';
 import { FaPhoneAlt, FaMapMarkerAlt, FaEnvelope, FaGithub, FaLinkedin } from 'react-icons/fa';
+import { API_BASE } from '../config';
 
 const Footer = () => {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
@@ -14,7 +15,7 @@ const Footer = () => {
     setStatus('sending');
 
     try {
-      await axios.post('https://portfolio-kkij.onrender.com/api/messages', form);
+      await axios.post(`${API_BASE}/messages`, form);
       setStatus('success');
       setForm({ name: '', email: '', message: '' }); // Clear form
       setTimeout(() => setStatus(''), 5000);

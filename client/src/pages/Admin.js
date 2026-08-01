@@ -3,6 +3,7 @@ import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaTrash, FaPlus, FaEdit, FaTimes, FaSignOutAlt, FaCode, FaProjectDiagram, FaUserPlus, FaEnvelope, FaClock, FaFilePdf, FaArrowUp, FaArrowDown } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE } from '../config';
 
 // Configure Axios to automatically attach the JWT token to every request
 axios.interceptors.request.use((config) => {
@@ -35,10 +36,6 @@ const Admin = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentId, setCurrentId] = useState(null);
   const navigate = useNavigate();
-
-  // Base API URL
-  //const API_BASE = 'https://portfolio-kkij.onrender.com/api';
-  const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:5000/api';
 
   useEffect(() => { 
     if (activeTab === 'resume') {
@@ -488,7 +485,7 @@ const Admin = () => {
                         <h3 className="text-xl font-bold text-white mb-1">
                           {activeTab === 'projects' ? item.title : item.platform}
                         </h3>
-                        <p className="text-gray-400 text-sm">{activeTab === 'projects' ? item.description.substring(0, 50) + '...' : `Rating: ${item.rating}`}</p>
+                        <p className="text-gray-400 text-sm">{activeTab === 'projects' ? item.description.substring(0, 50) + '...' : `Max Rating: ${item.highestRating || 'N/A'}`}</p>
                       </>
                     )}
                   </div>

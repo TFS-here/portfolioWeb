@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaEnvelope, FaDownload } from 'react-icons/fa';
+import { API_BASE } from '../config';
 
 const roles = ["MERN Stack Developer", "Competitive Programmer", "Tech Enthusiast"];
 
@@ -37,13 +38,13 @@ const Hero = () => {
 
     const timer = setTimeout(handleTyping, typingSpeed);
     return () => clearTimeout(timer);
-  }, [text, isDeleting, loopNum, roles, typingSpeed]);
+  }, [text, isDeleting, loopNum, typingSpeed]);
 
   // 2. Fetch Resume URL Effect
   useEffect(() => {
     const fetchResume = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/resume');
+        const res = await fetch(`${API_BASE}/resume`);
         const data = await res.json();
         
         if (res.ok && data.resumeUrl) {

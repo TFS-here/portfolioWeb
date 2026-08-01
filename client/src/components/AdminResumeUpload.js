@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { API_BASE } from '../config';
 
 const AdminResumeUpload = () => {
   const [file, setFile] = useState(null);
@@ -28,8 +29,7 @@ const AdminResumeUpload = () => {
     formData.append('file', file); 
 
     try {
-      // Replace with your actual backend URL if it's hosted elsewhere
-      const response = await fetch('http://localhost:5000/api/resume/upload', {
+      const response = await fetch(`${API_BASE}/resume/upload`, {
         method: 'POST',
         body: formData, 
         // Note: Do NOT set 'Content-Type': 'application/json' here. 
@@ -60,7 +60,7 @@ const AdminResumeUpload = () => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/api/resume/delete', {
+      const response = await fetch(`${API_BASE}/resume/delete`, {
         method: 'DELETE',
       });
 

@@ -6,14 +6,14 @@ import Skills from '../components/Skills';
 import CodingStats from '../components/CodingStats';
 import Footer from '../components/Footer';
 import { FaTimes } from 'react-icons/fa';
+import { API_BASE } from '../config';
 
 const Home = () => {
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
 
   useEffect(() => {
-    // Make sure your backend server is running on port 5000!
-    axios.get(`${process.env.REACT_APP_API_BASE || 'http://localhost:5000/api'}/projects`)
+    axios.get(`${API_BASE}/projects`)
       .then(res => setProjects(res.data))
       .catch(err => console.error(err));
   }, []);

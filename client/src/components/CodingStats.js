@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { FaExternalLinkAlt, FaTrophy, FaChartLine } from 'react-icons/fa';
+import { API_BASE } from '../config';
 
 const CodingStats = () => {
   const [stats, setStats] = useState([]);
 
   useEffect(() => {
-    axios.get('https://portfolio-kkij.onrender.com/api/stats')
+    axios.get(`${API_BASE}/stats`)
       .then(res => setStats(res.data))
       .catch(err => console.error(err));
   }, []);
@@ -41,10 +42,10 @@ const CodingStats = () => {
             {/* Ratings */}
             <div className="flex items-end gap-2 mb-6">
               <span className="text-4xl font-bold drop-shadow-glow" style={{ color: stat.iconColor }}>
-                {stat.rating || 'N/A'}
+                {stat.highestRating || 'N/A'}
               </span>
               <span className="text-gray-500 text-sm mb-1">
-                (Max: {stat.highestRating})
+                Max (Current: {stat.rating || 'N/A'})
               </span>
             </div>
 

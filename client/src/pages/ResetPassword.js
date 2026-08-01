@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
-
-const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:5000/api';
+import { API_BASE } from '../config';
 
 const ResetPassword = () => {
   const [password, setPassword] = useState('');
