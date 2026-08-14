@@ -29,8 +29,10 @@ const AdminResumeUpload = () => {
     formData.append('file', file); 
 
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch(`${API_BASE}/resume/upload`, {
         method: 'POST',
+        headers: { 'x-auth-token': token },
         body: formData, 
         // Note: Do NOT set 'Content-Type': 'application/json' here. 
         // The browser automatically sets the correct multipart/form-data headers.
@@ -60,8 +62,10 @@ const AdminResumeUpload = () => {
     setLoading(true);
 
     try {
+      const token = localStorage.getItem('token');
       const response = await fetch(`${API_BASE}/resume/delete`, {
         method: 'DELETE',
+        headers: { 'x-auth-token': token },
       });
 
       const data = await response.json();

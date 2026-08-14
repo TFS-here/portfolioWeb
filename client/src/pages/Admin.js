@@ -266,11 +266,18 @@ const Admin = () => {
           'x-auth-token': token
         }
       });
+      const responseData = await res.json().catch(() => ({}));
+
       if (res.ok) {
         setResumeMessage('🗑️ Resume deleted successfully!');
         setCurrentResume(null);
+      } else if (res.status === 401) {
+        // JWTs expire after one day. Do not leave the user on an admin page
+        // that can no longer make authenticated requests.
+        localStorage.removeItem('token');
+        navigate('/login');
       } else {
-        setResumeMessage('❌ Failed to delete resume.');
+        setResumeMessage(`❌ ${responseData.message || responseData.error || 'Failed to delete resume.'}`);
       }
     } catch (error) {
       setResumeMessage('❌ Server error during deletion.');
