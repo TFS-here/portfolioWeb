@@ -36,7 +36,7 @@ const CodingStats = () => {
             {/* Header */}
             <div className="flex justify-between items-start mb-4">
               <h3 className="text-2xl font-display font-bold text-white">{stat.platform}</h3>
-              <FaExternalLinkAlt className="text-gray-500 group-hover:text-neon-blue transition-colors" />
+              <FaExternalLinkAlt className="text-gray-400 group-hover:text-neon-blue transition-colors" />
             </div>
 
             {/* Ratings */}
@@ -44,7 +44,7 @@ const CodingStats = () => {
               <span className="text-4xl font-bold drop-shadow-glow" style={{ color: stat.iconColor }}>
                 {stat.highestRating || 'N/A'}
               </span>
-              <span className="text-gray-500 text-sm mb-1">
+              <span className="text-gray-400 text-sm mb-1">
                 Max (Current: {stat.rating || 'N/A'})
               </span>
             </div>
@@ -52,13 +52,13 @@ const CodingStats = () => {
             {/* Grid Stats */}
             <div className="grid grid-cols-2 gap-4 border-t border-gray-800 pt-4">
               <div>
-                <p className="text-xs text-gray-500 flex items-center gap-1 mb-1">
+                <p className="text-xs text-gray-400 flex items-center gap-1 mb-1">
                   <FaChartLine /> Solved
                 </p>
                 <p className="text-xl text-white font-mono">{stat.totalSolved}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500 flex items-center gap-1 mb-1">
+                <p className="text-xs text-gray-400 flex items-center gap-1 mb-1">
                   <FaTrophy /> Contests
                 </p>
                 <p className="text-xl text-white font-mono">{stat.totalContests}</p>

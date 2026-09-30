@@ -6,7 +6,7 @@ const strictAuth = (req, res, next) => {
 
   // Check if no token
   if (!token) {
-    return res.status(401).json({ msg: 'No token, authorization denied' });
+    return res.status(401).json({ msg: 'No token, authorization denied', message: 'No token, authorization denied', error: 'No token, authorization denied' });
   }
 
   // Verify token
@@ -15,7 +15,7 @@ const strictAuth = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (err) {
-    res.status(401).json({ msg: 'Token is not valid' });
+    res.status(401).json({ msg: 'Token is not valid', message: 'Token is not valid (session expired). Please log in again.', error: 'Token is not valid' });
   }
 };
 

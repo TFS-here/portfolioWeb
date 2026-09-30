@@ -246,7 +246,8 @@ const Admin = () => {
         setResumeFile(null);
         document.getElementById('file-upload').value = '';
       } else {
-        setResumeMessage(`❌ Error: ${data.error || data.message}`);
+        const errText = data.error || data.message || data.msg || (res.status === 401 ? "Session expired. Please log out and back in." : `Upload failed (Status ${res.status})`);
+        setResumeMessage(`❌ Error: ${errText}`);
       }
     } catch (error) {
       setResumeMessage('❌ Server error during upload.');

@@ -44,7 +44,8 @@ const AdminResumeUpload = () => {
         setMessage('✅ Resume uploaded successfully!');
         setFile(null); // Reset the file input
       } else {
-        setMessage(`❌ Error: ${data.message || data.error}`);
+        const errText = data.message || data.error || data.msg || (response.status === 401 ? "Session expired. Please log out and back in." : `Upload failed (Status ${response.status})`);
+        setMessage(`❌ Error: ${errText}`);
       }
     } catch (error) {
       console.error(error);

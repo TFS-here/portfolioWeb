@@ -141,7 +141,7 @@ const Hero = () => {
             className={`inline-flex items-center gap-3 px-8 py-3 border-2 font-mono text-lg uppercase tracking-widest transition-all duration-300 ${
               resumeUrl 
                 ? 'border-neon-green text-neon-green hover:bg-neon-green hover:text-black' 
-                : 'border-gray-600 text-gray-600 cursor-not-allowed'
+                : 'border-gray-500 text-gray-400 cursor-not-allowed'
             }`}
           >
             <FaDownload />
