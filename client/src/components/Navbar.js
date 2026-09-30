@@ -20,7 +20,11 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Hamburger */}
-        <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden text-gray-300 hover:text-neon-green transition text-xl">
+        <button 
+          onClick={() => setMenuOpen(!menuOpen)} 
+          className="md:hidden text-gray-300 hover:text-neon-green transition text-xl"
+          aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+        >
           {menuOpen ? <FaTimes /> : <FaBars />}
         </button>
       </div>

@@ -28,7 +28,7 @@ const Home = () => {
          <h2 className="text-4xl font-display text-center mb-12 text-neon-green">PROJECTS</h2>
          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
            {projects.length === 0 ? (
-             <p className="text-gray-500 text-center col-span-2">Loading projects from backend...</p>
+             <p className="text-gray-400 text-center col-span-2">Loading projects from backend...</p>
            ) : (
              projects.map(proj => (
                 <motion.div 
@@ -73,7 +73,11 @@ const Home = () => {
               onClick={(e) => e.stopPropagation()}
               className="cyber-card p-8 md:p-10 rounded-2xl w-full max-w-3xl max-h-[85vh] overflow-y-auto border border-neon-blue/50 shadow-[0_0_30px_rgba(0,243,255,0.15)] relative custom-scrollbar"
             >
-              <button onClick={() => setSelectedProject(null)} className="absolute top-6 right-6 text-gray-400 hover:text-white transition-colors">
+              <button 
+                onClick={() => setSelectedProject(null)} 
+                aria-label="Close project details"
+                className="absolute top-6 right-6 text-gray-400 hover:text-white transition-colors"
+              >
                 <FaTimes size={24} />
               </button>
               

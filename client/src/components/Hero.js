@@ -124,9 +124,9 @@ const Hero = () => {
         </p>
 
         <div className="flex gap-6 justify-center">
-          <a href="https://github.com/TFS-here" target="_blank" rel="noreferrer" className="text-3xl text-gray-400 hover:text-neon-green transition-colors"><FaGithub /></a>
-          <a href="https://www.linkedin.com/in/md-tasnim-ferdous-972429240/" target="_blank" rel="noreferrer" className="text-3xl text-gray-400 hover:text-neon-blue transition-colors"><FaLinkedin /></a>
-          <a href="mailto:shifattfs00@gmail.com" className="text-3xl text-gray-400 hover:text-neon-green transition-colors"><FaEnvelope /></a>
+          <a href="https://github.com/TFS-here" target="_blank" rel="noreferrer" aria-label="GitHub Profile" className="text-3xl text-gray-400 hover:text-neon-green transition-colors"><FaGithub /></a>
+          <a href="https://www.linkedin.com/in/md-tasnim-ferdous-972429240/" target="_blank" rel="noreferrer" aria-label="LinkedIn Profile" className="text-3xl text-gray-400 hover:text-neon-blue transition-colors"><FaLinkedin /></a>
+          <a href="mailto:shifattfs00@gmail.com" aria-label="Send Email" className="text-3xl text-gray-400 hover:text-neon-green transition-colors"><FaEnvelope /></a>
         </div>
 
         {/* --- UPDATED: Button triggering the handleDownload function --- */}

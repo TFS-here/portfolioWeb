@@ -45,10 +45,10 @@ const Footer = () => {
           </div>
 
           <div className="flex gap-4 mt-8">
-            <a href="https://github.com/shifattfs00" target="_blank" rel="noreferrer" className="p-3 bg-gray-900 rounded-full hover:bg-neon-green hover:text-black transition-all">
+            <a href="https://github.com/shifattfs00" target="_blank" rel="noreferrer" aria-label="GitHub Profile" className="p-3 bg-gray-900 rounded-full hover:bg-neon-green hover:text-black transition-all">
               <FaGithub size={20} />
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="p-3 bg-gray-900 rounded-full hover:bg-neon-blue hover:text-black transition-all">
+            <a href="https://linkedin.com" target="_blank" rel="noreferrer" aria-label="LinkedIn Profile" className="p-3 bg-gray-900 rounded-full hover:bg-neon-blue hover:text-black transition-all">
               <FaLinkedin size={20} />
             </a>
           </div>
@@ -63,8 +63,9 @@ const Footer = () => {
         >
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <label className="block text-neon-blue text-sm mb-2 font-mono">Name</label>
+              <label htmlFor="contact-name" className="block text-neon-blue text-sm mb-2 font-mono">Name</label>
               <input 
+                id="contact-name"
                 name="name" 
                 value={form.name} 
                 onChange={handleChange} 
@@ -74,8 +75,9 @@ const Footer = () => {
             </div>
             
             <div className="mb-4">
-              <label className="block text-neon-blue text-sm mb-2 font-mono">Email</label>
+              <label htmlFor="contact-email" className="block text-neon-blue text-sm mb-2 font-mono">Email</label>
               <input 
+                id="contact-email"
                 name="email" 
                 type="email"
                 value={form.email} 
@@ -86,8 +88,9 @@ const Footer = () => {
             </div>
             
             <div className="mb-6">
-              <label className="block text-neon-blue text-sm mb-2 font-mono">Message</label>
+              <label htmlFor="contact-message" className="block text-neon-blue text-sm mb-2 font-mono">Message</label>
               <textarea 
+                id="contact-message"
                 name="message" 
                 value={form.message} 
                 onChange={handleChange} 
@@ -115,7 +118,7 @@ const Footer = () => {
         </motion.div>
       </div>
 
-      <div className="text-center text-gray-600 text-sm mt-20 font-mono">
+      <div className="text-center text-gray-400 text-sm mt-20 font-mono">
         © 2024 Md. Tasnim Ferdous. Built with MERN & Framer Motion.
       </div>
     </footer>
